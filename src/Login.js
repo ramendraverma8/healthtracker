@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { TextField, Button, IconButton, Typography, Container, Box, InputAdornment, CircularProgress  } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Google as GoogleIcon } from '@mui/icons-material';
-import { db, auth } from './firebaseConfig'; // Import your Firebase configuration
+import { auth } from './firebaseConfig'; // Import your Firebase configuration
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -47,7 +47,7 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken; 
-      console.log('Google Sign In successful');
+      console.log('Google Sign In successful', token);
        navigate('/dashboard');
     } catch (error) {
       console.error('Google Sign In error:', error);

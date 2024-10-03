@@ -55,9 +55,16 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    const labels = readings.map(reading => new Date(reading.timestamp).toLocaleString());
-    const systolicData = readings.map(reading => reading.systolic);
-    const diastolicData = readings.map(reading => reading.diastolic);
+    const filteredReadings = readings.filter((reading) => {
+      const readingDate = new Date(reading.timestamp);
+      const isWithinDateRange = (!startDate || readingDate >= startDate) && (!endDate || readingDate <= endDate);
+      const isMatchingFilterType = filterType === 'all' || (filterType === 'morning' && readingDate.getHours() < 12) || (filterType === 'evening' && readingDate.getHours() >= 12);
+      return isWithinDateRange && isMatchingFilterType;
+    });
+
+    const labels = filteredReadings.map(reading => new Date(reading.timestamp).toLocaleString());
+    const systolicData = filteredReadings.map(reading => reading.systolic);
+    const diastolicData = filteredReadings.map(reading => reading.diastolic);
 
     setChartData({
       labels,
@@ -76,7 +83,7 @@ const Dashboard = () => {
         }
       ]
     });
-  }, [readings]);
+  }, [readings, startDate, endDate, filterType]);
 
   return (
     <Container>
